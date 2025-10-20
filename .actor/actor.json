@@ -1,0 +1,16 @@
+{
+    "actorSpecification": 1,
+    "name": "clearbit-combined",
+    "title": "Clearbit Combined Actor",
+    "description": "Actor for combining Clearbit and Tomba data.",
+    "version": "0.6",
+    "buildTag": "latest",
+    "meta": {
+        "templateId": "ts-empty"
+    },
+    "dockerfile": "../Dockerfile",
+    "input": "./input_schema.json",
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    }
+}

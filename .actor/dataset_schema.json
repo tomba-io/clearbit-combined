@@ -1,0 +1,651 @@
+{
+    "actorSpecification": 1,
+    "fields": {
+        "type": "object",
+        "properties": {
+            "person": {
+                "type": ["object", "null"],
+                "description": "Person information from enrichment",
+                "properties": {
+                    "name": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "fullName": {
+                                "type": ["string", "null"],
+                                "description": "Full name of the person"
+                            },
+                            "givenName": {
+                                "type": ["string", "null"],
+                                "description": "First name"
+                            },
+                            "familyName": {
+                                "type": ["string", "null"],
+                                "description": "Last name"
+                            }
+                        }
+                    },
+                    "email": {
+                        "type": ["string", "null"],
+                        "description": "Email address"
+                    },
+                    "location": {
+                        "type": ["string", "null"],
+                        "description": "Person's location code"
+                    },
+                    "gender": {
+                        "type": ["string", "null"],
+                        "description": "Person's gender"
+                    },
+                    "geo": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "city": {
+                                "type": ["string", "null"],
+                                "description": "City"
+                            },
+                            "state": {
+                                "type": ["string", "null"],
+                                "description": "State"
+                            },
+                            "country": {
+                                "type": ["string", "null"],
+                                "description": "Country"
+                            },
+                            "countryCode": {
+                                "type": ["string", "null"],
+                                "description": "Country code"
+                            }
+                        }
+                    },
+                    "employment": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "domain": {
+                                "type": ["string", "null"],
+                                "description": "Company domain"
+                            },
+                            "name": {
+                                "type": ["string", "null"],
+                                "description": "Company name"
+                            },
+                            "title": {
+                                "type": ["string", "null"],
+                                "description": "Job title"
+                            },
+                            "role": {
+                                "type": ["string", "null"],
+                                "description": "Role category"
+                            }
+                        }
+                    },
+                    "linkedin": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "handle": {
+                                "type": ["string", "null"],
+                                "description": "LinkedIn profile URL"
+                            }
+                        }
+                    },
+                    "twitter": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "handle": {
+                                "type": ["string", "null"],
+                                "description": "Twitter handle"
+                            }
+                        }
+                    },
+                    "verification": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "date": {
+                                "type": ["string", "null"],
+                                "description": "Verification date"
+                            },
+                            "status": {
+                                "type": ["string", "null"],
+                                "description": "Verification status"
+                            }
+                        }
+                    },
+                    "phone": {
+                        "type": ["boolean", "null"],
+                        "description": "Has phone number"
+                    }
+                }
+            },
+            "company": {
+                "type": ["object", "null"],
+                "description": "Company information from enrichment",
+                "properties": {
+                    "name": {
+                        "type": ["string", "null"],
+                        "description": "Company name"
+                    },
+                    "legalName": {
+                        "type": ["string", "null"],
+                        "description": "Legal company name"
+                    },
+                    "domain": {
+                        "type": ["string", "null"],
+                        "description": "Company domain"
+                    },
+                    "site": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "phoneNumbers": {
+                                "type": ["array", "null"],
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Company phone numbers"
+                            },
+                            "emailAddresses": {
+                                "type": ["array", "null"],
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Company email addresses"
+                            }
+                        }
+                    },
+                    "category": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "sicCode": {
+                                "type": ["string", "null"],
+                                "description": "SIC code"
+                            },
+                            "sic4Codes": {
+                                "type": ["array", "null"],
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "SIC 4-digit codes"
+                            },
+                            "naicsCode": {
+                                "type": ["string", "null"],
+                                "description": "NAICS code"
+                            }
+                        }
+                    },
+                    "tags": {
+                        "type": ["array", "null"],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Company tags"
+                    },
+                    "description": {
+                        "type": ["string", "null"],
+                        "description": "Company description"
+                    },
+                    "foundedYear": {
+                        "type": ["string", "null"],
+                        "description": "Year founded"
+                    },
+                    "location": {
+                        "type": ["string", "null"],
+                        "description": "Company location code"
+                    },
+                    "geo": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "streetAddress": {
+                                "type": ["string", "null"],
+                                "description": "Street address"
+                            },
+                            "city": {
+                                "type": ["string", "null"],
+                                "description": "City"
+                            },
+                            "state": {
+                                "type": ["string", "null"],
+                                "description": "State"
+                            },
+                            "postalCode": {
+                                "type": ["string", "null"],
+                                "description": "Postal code"
+                            },
+                            "country": {
+                                "type": ["string", "null"],
+                                "description": "Country"
+                            },
+                            "countryCode": {
+                                "type": ["string", "null"],
+                                "description": "Country code"
+                            }
+                        }
+                    },
+                    "linkedin": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "handle": {
+                                "type": ["string", "null"],
+                                "description": "LinkedIn company handle"
+                            }
+                        }
+                    },
+                    "twitter": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "handle": {
+                                "type": ["string", "null"],
+                                "description": "Twitter handle"
+                            }
+                        }
+                    },
+                    "facebook": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "handle": {
+                                "type": ["string", "null"],
+                                "description": "Facebook handle"
+                            }
+                        }
+                    },
+                    "whois": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "registrar_name": {
+                                "type": ["string", "null"],
+                                "description": "Domain registrar"
+                            },
+                            "created_date": {
+                                "type": ["string", "null"],
+                                "description": "Domain creation date"
+                            },
+                            "referral_url": {
+                                "type": ["string", "null"],
+                                "description": "Registrar URL"
+                            }
+                        }
+                    },
+                    "emailProvider": {
+                        "type": ["string", "null"],
+                        "description": "Email provider"
+                    },
+                    "type": {
+                        "type": ["string", "null"],
+                        "description": "Company type"
+                    },
+                    "metrics": {
+                        "type": ["object", "null"],
+                        "properties": {
+                            "trafficRank": {
+                                "type": ["string", "null"],
+                                "description": "Website traffic rank"
+                            },
+                            "employees": {
+                                "type": ["string", "null"],
+                                "description": "Employee count range"
+                            },
+                            "annualRevenue": {
+                                "type": ["string", "null"],
+                                "description": "Annual revenue range"
+                            },
+                            "estimatedAnnualRevenue": {
+                                "type": ["string", "null"],
+                                "description": "Estimated annual revenue"
+                            }
+                        }
+                    },
+                    "tech": {
+                        "type": ["array", "null"],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Technologies used"
+                    },
+                    "techCategories": {
+                        "type": ["array", "null"],
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Technology categories"
+                    }
+                }
+            },
+            "domain": {
+                "type": ["string", "null"],
+                "description": "The domain/email that was enriched"
+            },
+            "email": {
+                "type": ["string", "null"],
+                "description": "The email address that was enriched"
+            },
+            "source": {
+                "type": ["string", "null"],
+                "description": "Data source (tomba_enrichment)"
+            },
+            "error": {
+                "type": ["string", "null"],
+                "description": "Error message if enrichment failed"
+            }
+        },
+        "required": ["email", "source"]
+    },
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "transformation": {
+                "fields": [
+                    "email",
+                    "person.name.fullName",
+                    "person.employment.name",
+                    "person.employment.title",
+                    "company.name",
+                    "company.geo.country",
+                    "company.geo.city",
+                    "company.metrics.employees",
+                    "person.verification.status",
+                    "source",
+                    "error"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "email": {
+                        "label": "Email"
+                    },
+                    "person.name.fullName": {
+                        "label": "Name"
+                    },
+                    "person.employment.name": {
+                        "label": "Company"
+                    },
+                    "person.employment.title": {
+                        "label": "Title"
+                    },
+                    "company.name": {
+                        "label": "Company Name"
+                    },
+                    "company.geo.country": {
+                        "label": "Country"
+                    },
+                    "company.geo.city": {
+                        "label": "City"
+                    },
+                    "company.metrics.employees": {
+                        "label": "Company Size"
+                    },
+                    "person.verification.status": {
+                        "label": "Email Status"
+                    },
+                    "source": {
+                        "label": "Source"
+                    },
+                    "error": {
+                        "label": "Error"
+                    }
+                }
+            }
+        },
+        "person": {
+            "title": "Person Details",
+            "transformation": {
+                "fields": [
+                    "email",
+                    "person.name.fullName",
+                    "person.name.givenName",
+                    "person.name.familyName",
+                    "person.gender",
+                    "person.location",
+                    "person.geo.country",
+                    "person.geo.city",
+                    "person.employment.name",
+                    "person.employment.title",
+                    "person.employment.role",
+                    "person.linkedin.handle",
+                    "person.twitter.handle",
+                    "person.verification.status",
+                    "person.verification.date",
+                    "person.phone",
+                    "source",
+                    "error"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "email": {
+                        "label": "Email"
+                    },
+                    "person.name.fullName": {
+                        "label": "Full Name"
+                    },
+                    "person.name.givenName": {
+                        "label": "First Name"
+                    },
+                    "person.name.familyName": {
+                        "label": "Last Name"
+                    },
+                    "person.gender": {
+                        "label": "Gender"
+                    },
+                    "person.location": {
+                        "label": "Location"
+                    },
+                    "person.geo.country": {
+                        "label": "Country"
+                    },
+                    "person.geo.city": {
+                        "label": "City"
+                    },
+                    "person.employment.name": {
+                        "label": "Company"
+                    },
+                    "person.employment.title": {
+                        "label": "Job Title"
+                    },
+                    "person.employment.role": {
+                        "label": "Role"
+                    },
+                    "person.linkedin.handle": {
+                        "label": "LinkedIn"
+                    },
+                    "person.twitter.handle": {
+                        "label": "Twitter"
+                    },
+                    "person.verification.status": {
+                        "label": "Email Status"
+                    },
+                    "person.verification.date": {
+                        "label": "Verified Date"
+                    },
+                    "person.phone": {
+                        "label": "Has Phone"
+                    },
+                    "source": {
+                        "label": "Source"
+                    },
+                    "error": {
+                        "label": "Error"
+                    }
+                }
+            }
+        },
+        "company": {
+            "title": "Company Details",
+            "transformation": {
+                "fields": [
+                    "email",
+                    "company.name",
+                    "company.legalName",
+                    "company.domain",
+                    "company.description",
+                    "company.foundedYear",
+                    "company.type",
+                    "company.location",
+                    "company.geo.country",
+                    "company.geo.city",
+                    "company.geo.streetAddress",
+                    "company.metrics.employees",
+                    "company.metrics.annualRevenue",
+                    "company.metrics.trafficRank",
+                    "company.emailProvider",
+                    "company.linkedin.handle",
+                    "company.twitter.handle",
+                    "company.facebook.handle",
+                    "company.tags",
+                    "source",
+                    "error"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "email": {
+                        "label": "Email"
+                    },
+                    "company.name": {
+                        "label": "Company Name"
+                    },
+                    "company.legalName": {
+                        "label": "Legal Name"
+                    },
+                    "company.domain": {
+                        "label": "Domain"
+                    },
+                    "company.description": {
+                        "label": "Description"
+                    },
+                    "company.foundedYear": {
+                        "label": "Founded"
+                    },
+                    "company.type": {
+                        "label": "Company Type"
+                    },
+                    "company.location": {
+                        "label": "Location"
+                    },
+                    "company.geo.country": {
+                        "label": "Country"
+                    },
+                    "company.geo.city": {
+                        "label": "City"
+                    },
+                    "company.geo.streetAddress": {
+                        "label": "Address"
+                    },
+                    "company.metrics.employees": {
+                        "label": "Employees"
+                    },
+                    "company.metrics.annualRevenue": {
+                        "label": "Revenue"
+                    },
+                    "company.metrics.trafficRank": {
+                        "label": "Traffic Rank"
+                    },
+                    "company.emailProvider": {
+                        "label": "Email Provider"
+                    },
+                    "company.linkedin.handle": {
+                        "label": "LinkedIn"
+                    },
+                    "company.twitter.handle": {
+                        "label": "Twitter"
+                    },
+                    "company.facebook.handle": {
+                        "label": "Facebook"
+                    },
+                    "company.tags": {
+                        "label": "Tags"
+                    },
+                    "source": {
+                        "label": "Source"
+                    },
+                    "error": {
+                        "label": "Error"
+                    }
+                }
+            }
+        },
+        "contact": {
+            "title": "Contact Information",
+            "transformation": {
+                "fields": [
+                    "email",
+                    "person.name.fullName",
+                    "person.employment.name",
+                    "person.employment.title",
+                    "person.linkedin.handle",
+                    "person.twitter.handle",
+                    "person.phone",
+                    "company.name",
+                    "company.domain",
+                    "company.site.emailAddresses",
+                    "company.site.phoneNumbers",
+                    "company.linkedin.handle",
+                    "company.twitter.handle",
+                    "company.facebook.handle",
+                    "company.geo.country",
+                    "company.geo.city",
+                    "source",
+                    "error"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "email": {
+                        "label": "Email"
+                    },
+                    "person.name.fullName": {
+                        "label": "Person Name"
+                    },
+                    "person.employment.name": {
+                        "label": "Company"
+                    },
+                    "person.employment.title": {
+                        "label": "Title"
+                    },
+                    "person.linkedin.handle": {
+                        "label": "Person LinkedIn"
+                    },
+                    "person.twitter.handle": {
+                        "label": "Person Twitter"
+                    },
+                    "person.phone": {
+                        "label": "Has Phone"
+                    },
+                    "company.name": {
+                        "label": "Company Name"
+                    },
+                    "company.domain": {
+                        "label": "Company Domain"
+                    },
+                    "company.site.emailAddresses": {
+                        "label": "Company Emails"
+                    },
+                    "company.site.phoneNumbers": {
+                        "label": "Company Phones"
+                    },
+                    "company.linkedin.handle": {
+                        "label": "Company LinkedIn"
+                    },
+                    "company.twitter.handle": {
+                        "label": "Company Twitter"
+                    },
+                    "company.facebook.handle": {
+                        "label": "Company Facebook"
+                    },
+                    "company.geo.country": {
+                        "label": "Country"
+                    },
+                    "company.geo.city": {
+                        "label": "City"
+                    },
+                    "source": {
+                        "label": "Source"
+                    },
+                    "error": {
+                        "label": "Error"
+                    }
+                }
+            }
+        }
+    }
+}
