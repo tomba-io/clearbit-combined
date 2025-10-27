@@ -1,0 +1,14 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "Clearbit Combined Output",
+    "description": "Output from Clearbit Combined Actor - unified person and company enrichment in a single workflow",
+    "type": "object",
+    "properties": {
+        "results": {
+            "type": "string",
+            "title": "Combined Enrichment Results",
+            "description": "Complete person and company profiles with comprehensive business intelligence",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        }
+    }
+}
