@@ -231,6 +231,41 @@ The output contains three main sections:
 - [Authentication Guide](https://app.tomba.io/api) - Get your API keys
 - [Pricing & Limits](https://tomba.io/pricing) - Understand rate limits and costs
 
+## FAQ
+
+### General Questions
+
+**Q: What is combined person and company enrichment?**
+A: Combined enrichment takes an email address and returns comprehensive information about both the person and their company, providing complete contact and organizational intelligence in one request.
+
+**Q: What's the advantage of combined enrichment over separate requests?**
+A: Combined enrichment is more efficient, cost-effective, and provides correlated data ensuring person and company information is consistent and current.
+
+**Q: What information do I get in combined enrichment?**
+A: You get complete person details (name, role, social profiles), full company information (size, industry, technologies), and verified contact data all in one response.
+
+### Technical Questions
+
+**Q: How does pricing work for combined enrichment?**
+A: Combined enrichment typically costs less than running separate person and company enrichment requests, while providing more comprehensive data.
+
+**Q: Can I use any email address for combined enrichment?**
+A: Business email addresses work best. Personal domains (gmail.com) may return limited company information since they're not associated with specific organizations.
+
+**Q: How many emails can I enrich at once?**
+A: You can process up to 1000 emails per run. Combined enrichment is perfect for comprehensive contact database enhancement.
+
+### Business Applications
+
+**Q: How does this help with account-based marketing?**
+A: Combined enrichment provides complete account intelligence - understanding both the person you're targeting and their company context for highly personalized campaigns.
+
+**Q: Is this useful for sales qualification?**
+A: Absolutely! Get complete lead intelligence including personal background, role, company characteristics, and organizational context for better qualification and approach strategies.
+
+**Q: Can I use this for comprehensive lead scoring?**
+A: Yes! Combined data enables sophisticated lead scoring models using both individual characteristics (role, seniority) and company attributes (size, industry, technology stack).
+
 ## Keywords
 
 Clearbit combined, person company enrichment, contact enrichment, lead enrichment, firmographic data, demographic data, business intelligence, contact data, prospect enrichment, people and company data, professional profiles, business data, complete enrichment, unified data, contact intelligence
