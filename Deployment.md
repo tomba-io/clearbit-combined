@@ -67,7 +67,7 @@ Note for `/combined/find`: a body such as `{ "data": { "person": null, "company"
 
 ## Architecture
 
-- `src/tomba.ts`: shared helper, identical in every Tomba Actor. It handles credentials, caching (`tomba-cache` key-value store), retries with exponential backoff, pay-per-event charging, budget reservation, the concurrency pool and resume state.
+- `src/tomba.ts`: shared helper, identical in every Tomba Actor. It handles credentials, caching (per-Actor `tomba-cache-<actorId>` key-value store; falls back to an in-run cache if it can't be opened), retries with exponential backoff, pay-per-event charging, budget reservation, the concurrency pool and resume state.
 - `src/main.ts`: reads `emails`, normalizes and deduplicates them, applies `maxResults` (one dataset item per email), skips emails already in the resume state, then calls `Enrichment.combined(email)` → `GET /combined/find?email=…` through `callTomba('combined', …)`.
 - Output: billable responses are pushed as `{ ...data, email, source, charged, cached }` (`data` holds `person` and `company`) with `source: 'tomba_enrichment'`; empty or failed lookups are pushed as `{ email, source, charged: false, cached, error }` (`error` defaults to `No data found`).
 - The `tomba` SDK v1.1.1 resolves every call to `{ data, rateLimit }`, where `data` is the response body. Its `.d.ts` types still declare the old return type, so always go through `callTomba()`.
@@ -102,7 +102,7 @@ curl "localhost:8080/?email=john@stripe.com"
 
 ## Key-value store schema
 
-`.actor/key_value_store_schema.json` documents the default key-value store records (`INPUT`, `TOMBA_STATE`). The cross-run cache lives in the separate named store `tomba-cache`.
+`.actor/key_value_store_schema.json` documents the default key-value store records (`INPUT`, `TOMBA_STATE`). The cross-run cache lives in the separate named store `tomba-cache-<actorId>`, one per Actor: under limited permissions an Actor can only open named storages it created itself, so the Tomba Actors must not share one store. If the store can't be opened, the run logs a warning and caches for this run only.
 
 ## Memory
 
