@@ -1,0 +1,569 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Tomba Clearbit Combined API",
+        "version": "1.0.0",
+        "description": "Real-time API (Apify Standby mode). Enrich email addresses with person and company profiles (Clearbit-compatible). Each email with a profile found costs $0.00312; emails with no data, errors and cached results are free."
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Enrich one or more emails with person and company data",
+                "description": "Without query parameters, returns a short usage note (also used as the readiness probe).",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email address to enrich. Repeat the parameter or separate values with commas for several emails.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "john@stripe.com"
+                    },
+                    {
+                        "name": "emails",
+                        "in": "query",
+                        "description": "Alias of `email`.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "john@stripe.com,info@tomba.io"
+                    },
+                    {
+                        "name": "maxResults",
+                        "in": "query",
+                        "description": "Maximum number of emails to enrich (default 50).",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "default": 50
+                        },
+                        "example": 10
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Results"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Error"
+                    },
+                    "402": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Enrich emails using a JSON input",
+                "description": "Accepts the same JSON input as a normal Actor run.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "emails": {
+                                        "type": "array",
+                                        "description": "Array of email addresses to enrich with company information.",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": ["john@stripe.com", "info@tomba.io"]
+                                    },
+                                    "maxResults": {
+                                        "type": "integer",
+                                        "description": "Maximum number of companies to enrich. Default is 50.",
+                                        "minimum": 1,
+                                        "maximum": 1000,
+                                        "default": 50
+                                    },
+                                    "maxConcurrency": {
+                                        "type": "integer",
+                                        "description": "How many Tomba requests run in parallel. There is no rate limit, so raise it for large lists.",
+                                        "minimum": 1,
+                                        "maximum": 50,
+                                        "default": 10
+                                    },
+                                    "maxRetries": {
+                                        "type": "integer",
+                                        "description": "How many times to retry a request after a network error, 429 or 5xx response (exponential backoff). Failed requests are never charged.",
+                                        "minimum": 0,
+                                        "maximum": 10,
+                                        "default": 3
+                                    },
+                                    "useCache": {
+                                        "type": "boolean",
+                                        "description": "Reuse results from previous runs for identical requests. Cached results are free.",
+                                        "default": true
+                                    },
+                                    "cacheTtlHours": {
+                                        "type": "integer",
+                                        "description": "How long cached results stay valid. 0 disables the cross-run cache.",
+                                        "minimum": 0,
+                                        "maximum": 720,
+                                        "default": 24
+                                    }
+                                },
+                                "required": ["emails"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Results"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/Error"
+                    },
+                    "402": {
+                        "$ref": "#/components/responses/Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "responses": {
+            "Results": {
+                "description": "Person and company profiles, one per email, in the same format as the dataset items.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Profile"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Error": {
+                "description": "Invalid input (400) or the run's max charge limit was reached (402).",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "error": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "Profile": {
+                "type": "object",
+                "properties": {
+                    "person": {
+                        "type": "object",
+                        "nullable": true,
+                        "description": "Person information from enrichment",
+                        "properties": {
+                            "name": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "fullName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Full name of the person"
+                                    },
+                                    "givenName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "First name"
+                                    },
+                                    "familyName": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Last name"
+                                    }
+                                }
+                            },
+                            "email": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Email address"
+                            },
+                            "location": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Person's location code"
+                            },
+                            "gender": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Person's gender"
+                            },
+                            "geo": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "city": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "City"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "State"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Country"
+                                    },
+                                    "countryCode": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Country code"
+                                    }
+                                }
+                            },
+                            "employment": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "domain": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Company domain"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Company name"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Job title"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Role category"
+                                    }
+                                }
+                            },
+                            "linkedin": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "handle": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "LinkedIn profile URL"
+                                    }
+                                }
+                            },
+                            "twitter": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "handle": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Twitter handle"
+                                    }
+                                }
+                            },
+                            "verification": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "date": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Verification date"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Verification status"
+                                    }
+                                }
+                            },
+                            "phone": {
+                                "type": "boolean",
+                                "nullable": true,
+                                "description": "Has phone number"
+                            }
+                        }
+                    },
+                    "company": {
+                        "type": "object",
+                        "nullable": true,
+                        "description": "Company information from enrichment",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Company name"
+                            },
+                            "legalName": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Legal company name"
+                            },
+                            "domain": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Company domain"
+                            },
+                            "site": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "phoneNumbers": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Company phone numbers"
+                                    },
+                                    "emailAddresses": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Company email addresses"
+                                    }
+                                }
+                            },
+                            "category": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "sicCode": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "SIC code"
+                                    },
+                                    "sic4Codes": {
+                                        "type": "array",
+                                        "nullable": true,
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "SIC 4-digit codes"
+                                    },
+                                    "naicsCode": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "NAICS code"
+                                    }
+                                }
+                            },
+                            "tags": {
+                                "type": "array",
+                                "nullable": true,
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Company tags"
+                            },
+                            "description": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Company description"
+                            },
+                            "foundedYear": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Year founded"
+                            },
+                            "location": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Company location code"
+                            },
+                            "geo": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "streetAddress": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Street address"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "City"
+                                    },
+                                    "state": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "State"
+                                    },
+                                    "postalCode": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Postal code"
+                                    },
+                                    "country": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Country"
+                                    },
+                                    "countryCode": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Country code"
+                                    }
+                                }
+                            },
+                            "linkedin": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "handle": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "LinkedIn company handle"
+                                    }
+                                }
+                            },
+                            "twitter": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "handle": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Twitter handle"
+                                    }
+                                }
+                            },
+                            "facebook": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "handle": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Facebook handle"
+                                    }
+                                }
+                            },
+                            "whois": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "registrar_name": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Domain registrar"
+                                    },
+                                    "created_date": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Domain creation date"
+                                    },
+                                    "referral_url": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Registrar URL"
+                                    }
+                                }
+                            },
+                            "emailProvider": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Email provider"
+                            },
+                            "type": {
+                                "type": "string",
+                                "nullable": true,
+                                "description": "Company type"
+                            },
+                            "metrics": {
+                                "type": "object",
+                                "nullable": true,
+                                "properties": {
+                                    "trafficRank": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Website traffic rank"
+                                    },
+                                    "employees": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Employee count range"
+                                    },
+                                    "annualRevenue": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Annual revenue range"
+                                    },
+                                    "estimatedAnnualRevenue": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Estimated annual revenue"
+                                    }
+                                }
+                            },
+                            "tech": {
+                                "type": "array",
+                                "nullable": true,
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Technologies used"
+                            },
+                            "techCategories": {
+                                "type": "array",
+                                "nullable": true,
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Technology categories"
+                            }
+                        }
+                    },
+                    "domain": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The domain/email that was enriched"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Input email (normalized)"
+                    },
+                    "source": {
+                        "type": "string"
+                    },
+                    "error": {
+                        "type": "string",
+                        "description": "Why no data was returned"
+                    },
+                    "charged": {
+                        "type": "boolean",
+                        "description": "Whether this result was charged"
+                    },
+                    "cached": {
+                        "type": "boolean",
+                        "description": "Whether this result came from the cache (free)"
+                    }
+                }
+            }
+        }
+    }
+}
