@@ -323,6 +323,14 @@
             "error": {
                 "type": ["string", "null"],
                 "description": "Error message if enrichment failed"
+            },
+            "charged": {
+                "type": "boolean",
+                "description": "Whether this request was charged (pay-per-event)"
+            },
+            "cached": {
+                "type": "boolean",
+                "description": "Whether the result came from the cache (free)"
             }
         },
         "required": ["email", "source"]
@@ -342,7 +350,9 @@
                     "company.metrics.employees",
                     "person.verification.status",
                     "source",
-                    "error"
+                    "error",
+                    "charged",
+                    "cached"
                 ]
             },
             "display": {

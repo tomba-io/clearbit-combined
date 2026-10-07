@@ -3,7 +3,7 @@
     "name": "clearbit-combined",
     "title": "Clearbit Combined Actor",
     "description": "Actor for combining Clearbit and Tomba data.",
-    "version": "0.6",
+    "version": "1.0",
     "buildTag": "latest",
     "meta": {
         "templateId": "ts-empty"
@@ -13,5 +13,9 @@
     "output": "./output_schema.json",
     "storages": {
         "dataset": "./dataset_schema.json"
+    },
+    "environmentVariables": {
+        "TOMBA_API_KEY": "@tombaApiKey",
+        "TOMBA_API_SECRET": "@tombaApiSecret"
     }
 }
