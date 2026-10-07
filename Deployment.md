@@ -48,9 +48,9 @@ Deploy from Git instead: in Apify Console go to **Actors → Create new → Link
 
 In **Apify Console → Publication → Monetization**, choose **Pay per event** and add:
 
-| Event           | Price    | Charged when                                  |
-| --------------- | -------- | --------------------------------------------- |
-| `tomba-request` | $0.00312 | Tomba returns a billable response (see below) |
+| Event           | Price    | Charged when                                                               |
+| --------------- | -------- | -------------------------------------------------------------------------- |
+| `tomba-request` | $0.00312 | 2 events per billable combined lookup (Tomba charges 2 credits; see below) |
 
 `isBillable()` in `src/tomba.ts` mirrors Tomba's billing:
 

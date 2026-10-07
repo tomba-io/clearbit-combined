@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-- Pay-per-event pricing: $0.00312 per billable request (`tomba-request`); errors, empty results and cache hits are free
+- Pay-per-event pricing: 2 `tomba-request` events ($0.00312 each, $0.00624 in total) per billable combined lookup, matching Tomba's 2-credit cost; errors, empty results and cache hits are free
+- Each item includes `chargedCredits`
 - No client-side rate limit; parallel processing with `maxConcurrency`
 - Automatic retries with exponential backoff for network errors, 429 and 5xx (`maxRetries`)
 - Cross-run result cache (`useCache`, `cacheTtlHours`)

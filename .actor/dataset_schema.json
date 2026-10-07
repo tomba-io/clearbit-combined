@@ -328,6 +328,10 @@
                 "type": "boolean",
                 "description": "Whether this request was charged (pay-per-event)"
             },
+            "chargedCredits": {
+                "type": "integer",
+                "description": "Credits billed for this email ($0.00312 each): 2 for a combined lookup, 0 when not charged"
+            },
             "cached": {
                 "type": "boolean",
                 "description": "Whether the result came from the cache (free)"

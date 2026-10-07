@@ -92,6 +92,7 @@ describe('clearbit-combined', () => {
             email: 'john@stripe.com',
             source: 'tomba_enrichment',
             charged: true,
+            chargedCredits: 2,
             cached: false,
         });
 
@@ -101,12 +102,14 @@ describe('clearbit-combined', () => {
                 email,
                 source: 'tomba_enrichment',
                 charged: false,
+                chargedCredits: 0,
                 cached: false,
                 error: 'No data found',
             });
         }
 
-        assert.deepEqual(result.chargeCounts, { 'tomba-request': 1 });
+        // A combined lookup costs 2 Tomba credits.
+        assert.deepEqual(result.chargeCounts, { 'tomba-request': 2 });
     });
 
     it('sends the built-in credentials to Tomba', async () => {
@@ -124,7 +127,7 @@ describe('clearbit-combined', () => {
         });
         assert.deepEqual(server.requests.map((r) => r.query.email).sort(), ['info@tomba.io', 'john@stripe.com']);
         assert.equal(result.items.length, 2);
-        assert.equal(totalCharges(result), 2);
+        assert.equal(totalCharges(result), 4);
     });
 
     it('does not charge Tomba error statuses and does not retry them', async () => {
@@ -164,7 +167,7 @@ describe('clearbit-combined', () => {
         assert.equal(result.items.length, 1);
         assert.equal(result.items[0].charged, true);
         assert.equal((result.items[0].company as { name: string }).name, 'Stripe');
-        assert.deepEqual(result.chargeCounts, { 'tomba-request': 1 });
+        assert.deepEqual(result.chargeCounts, { 'tomba-request': 2 });
     });
 
     it('serves repeated runs from the cache for free', async () => {
@@ -177,7 +180,7 @@ describe('clearbit-combined', () => {
         });
 
         assert.equal(server.requests.length, 1);
-        assert.equal(totalCharges(first), 1);
+        assert.equal(totalCharges(first), 2);
         assert.equal(second.items.length, 1);
         assert.equal((second.items[0].company as { name: string }).name, 'Stripe');
         assert.equal(second.items[0].cached, true);
@@ -195,7 +198,7 @@ describe('clearbit-combined', () => {
         });
         assert.equal(server.requests.length, 2);
         assert.equal(second.items[0].cached, false);
-        assert.equal(totalCharges(second), 1);
+        assert.equal(totalCharges(second), 2);
     });
 
     it('stops at the max charge limit and resumes without reprocessing', async () => {
@@ -203,10 +206,10 @@ describe('clearbit-combined', () => {
         const emails = ['a@a.com', 'b@b.com', 'c@c.com', 'd@d.com', 'e@e.com'];
         const input = { emails, maxConcurrency: 1, useCache: false, maxResults: 100 };
 
-        // Locally every event costs $1, so a $2 budget allows two billable requests.
-        const first = await run({ input, endpoint: server.url, maxTotalChargeUsd: 2 });
+        // Locally every event costs $1 and a lookup costs 2 events, so a $4 budget allows two lookups.
+        const first = await run({ input, endpoint: server.url, maxTotalChargeUsd: 4 });
         assert.equal(first.code, 0, first.output);
-        assert.equal(totalCharges(first), 2);
+        assert.equal(totalCharges(first), 4);
         assert.equal(server.requests.length, 2);
         assert.equal(first.items.length, 2);
 
@@ -218,7 +221,7 @@ describe('clearbit-combined', () => {
         );
         // The default storages are kept, so the dataset and charging log cover both runs.
         assert.equal(second.items.length, 5);
-        assert.equal(totalCharges(second), 5);
+        assert.equal(totalCharges(second), 10);
     });
 
     it('respects maxResults', async () => {
@@ -310,6 +313,7 @@ describe('clearbit-combined standby (real-time API)', () => {
                     email: 'john@stripe.com',
                     source: 'tomba_enrichment',
                     charged: true,
+                    chargedCredits: 2,
                     cached: false,
                 },
             );
@@ -321,7 +325,7 @@ describe('clearbit-combined standby (real-time API)', () => {
         } finally {
             stopped = await actor.stop();
         }
-        assert.deepEqual(stopped.chargeCounts, { 'tomba-request': 1 });
+        assert.deepEqual(stopped.chargeCounts, { 'tomba-request': 2 });
     });
 
     it('accepts a POST with the same JSON input as a normal run', async () => {
@@ -349,7 +353,7 @@ describe('clearbit-combined standby (real-time API)', () => {
         } finally {
             stopped = await actor.stop();
         }
-        assert.deepEqual(stopped.chargeCounts, { 'tomba-request': 1 });
+        assert.deepEqual(stopped.chargeCounts, { 'tomba-request': 2 });
     });
 
     it('keeps serving after a request hits maxResults', async () => {
@@ -385,7 +389,7 @@ describe('clearbit-combined standby (real-time API)', () => {
 
     it('returns 402 once the max charge limit is reached', async () => {
         const server = await mock();
-        const actor = await startStandbyActor({ endpoint: server.url, maxTotalChargeUsd: 1 });
+        const actor = await startStandbyActor({ endpoint: server.url, maxTotalChargeUsd: 2 });
         try {
             const first = await actor.call('/?email=a@a.com');
             assert.equal(first.status, 200);

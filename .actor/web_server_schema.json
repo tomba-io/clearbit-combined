@@ -3,7 +3,7 @@
     "info": {
         "title": "Tomba Clearbit Combined API",
         "version": "1.0.0",
-        "description": "Real-time API (Apify Standby mode). Enrich email addresses with person and company profiles (Clearbit-compatible). Each email with a profile found costs $0.00312; emails with no data, errors and cached results are free."
+        "description": "Real-time API (Apify Standby mode). Enrich email addresses with person and company profiles (Clearbit-compatible). Each email with a profile found costs $0.00624 (2 credits of $0.00312); emails with no data, errors and cached results are free."
     },
     "paths": {
         "/": {

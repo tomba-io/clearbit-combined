@@ -3,7 +3,10 @@ import { Enrichment } from 'tomba';
 
 import { InputError, queryInt, queryList, runActor } from './standby.js';
 import type { RunOptions } from './tomba.js';
-import { callTomba, getClient, normalizeEmail, runPool, unique } from './tomba.js';
+import { callTomba, EVENT_REQUEST, getClient, normalizeEmail, runPool, unique } from './tomba.js';
+
+/** Tomba charges 2 search credits for a combined (person + company) lookup. */
+const COMBINED_CREDITS = 2;
 
 interface ActorInput extends RunOptions {
     emails?: string[];
@@ -34,7 +37,13 @@ await runActor<ActorInput>({
         if (!standby) log.info(`Enriching person and company data for ${pending.length} emails`);
 
         await runPool(pending, async (email) => {
-            const res = await callTomba('combined', { email }, async () => enrichment.combined(email));
+            const res = await callTomba(
+                'combined',
+                { email },
+                async () => enrichment.combined(email),
+                EVENT_REQUEST,
+                COMBINED_CREDITS,
+            );
             if (res.skipped) return;
 
             const data = res.data as Record<string, unknown> | null | undefined;
@@ -46,6 +55,7 @@ await runActor<ActorInput>({
                     email,
                     source: SOURCE,
                     charged: res.charged,
+                    chargedCredits: res.chargedCount ?? 0,
                     cached: res.cached,
                 });
                 log.info(
@@ -57,6 +67,7 @@ await runActor<ActorInput>({
                     email,
                     source: SOURCE,
                     charged: res.charged,
+                    chargedCredits: 0,
                     cached: res.cached,
                     error,
                 });

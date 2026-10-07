@@ -1,19 +1,19 @@
 # Tomba Clearbit Combined Enrichment
 
-[![Price](https://img.shields.io/badge/Price-%243.12%20per%201K%20emails-brightgreen)](#pricing)
+[![Price](https://img.shields.io/badge/Price-%246.24%20per%201K%20emails-brightgreen)](#pricing)
 [![No signup](https://img.shields.io/badge/Tomba%20account-not%20needed-blue)](#quick-start)
 [![No rate limit](https://img.shields.io/badge/Rate%20limit-none-brightgreen)](#built-for-big-lists)
 
 **One email in, the person and their company out.** Paste a list of email addresses and get each person's name, job title, location and social profiles, plus a full profile of the company they work for: industry, size, revenue range, address, tech stack and more. All in one row, ready to export.
 
-No Tomba account. No API key. No subscription. **You pay $0.00312 per email, and only when we find data.**
+No Tomba account. No API key. No subscription. **You pay $0.00624 per email, and only when we find data.**
 
 ## Why teams choose this Actor
 
 - **Start in 30 seconds**: Open the Actor, paste your emails, click Start. Nothing to sign up for
-- **Two enrichments for the price of one**: Person and company data come back together for a single $0.00312 charge
+- **Person and company in one call**: Both profiles come back together in a single row for one $0.00624 charge
 - **Pay only for results**: Emails with no data, errors and invalid inputs are free
-- **$3.12 per 1,000 emails**: No monthly plan, no credits that expire, no minimum spend
+- **$6.24 per 1,000 emails**: No monthly plan, no credits that expire, no minimum spend
 - **Built for big lists**: No rate limit. Hundreds of emails run in parallel
 - **Never pay twice**: Emails you looked up in the last 24 hours come back from cache for free
 - **Clean input, clean output**: Emails are trimmed and lowercased, and duplicates are removed automatically
@@ -138,34 +138,36 @@ You get one row per email, with a `person` and a `company` section:
     "email": "****@ipinfo.io",
     "source": "tomba_enrichment",
     "charged": true,
+    "chargedCredits": 2,
     "cached": false
 }
 ```
 
-| Field                                                     | Description                                                      |
-| --------------------------------------------------------- | ---------------------------------------------------------------- |
-| `email`                                                   | The email you submitted (lowercased)                             |
-| `person.name`                                             | Full name, first name and last name                              |
-| `person.employment`                                       | Company name and domain, job title and role                      |
-| `person.location`, `person.geo`                           | Country code, city, state and country                            |
-| `person.gender`                                           | Gender, when known                                               |
-| `person.linkedin`, `person.twitter`                       | The person's social profile links                                |
-| `person.verification`                                     | Email verification status (e.g. `valid`) and when it was checked |
-| `person.phone`                                            | `true` if a phone number is known for this person                |
-| `company.name`, `company.legalName`, `company.domain`     | Company name, legal name and website                             |
-| `company.description`, `company.tags`                     | What the company does                                            |
-| `company.category`                                        | Industry codes: SIC and NAICS                                    |
-| `company.foundedYear`, `company.type`                     | Year founded and company type, e.g. privately held               |
-| `company.location`, `company.geo`                         | Country code and full address                                    |
-| `company.metrics`                                         | Employee range, revenue range and website traffic rank           |
-| `company.site`                                            | Phone numbers and email addresses published on the website       |
-| `company.linkedin`, `company.twitter`, `company.facebook` | Company social profiles                                          |
-| `company.tech`, `company.techCategories`                  | Technologies detected on the website and their categories        |
-| `company.emailProvider`, `company.whois`                  | Email provider and domain registration details                   |
-| `source`                                                  | Always `tomba_enrichment`                                        |
-| `charged`                                                 | `true` if this lookup was billed                                 |
-| `cached`                                                  | `true` if this result came from the cache (free)                 |
-| `error`                                                   | Why no data was returned, if applicable                          |
+| Field                                                     | Description                                                           |
+| --------------------------------------------------------- | --------------------------------------------------------------------- |
+| `email`                                                   | The email you submitted (lowercased)                                  |
+| `person.name`                                             | Full name, first name and last name                                   |
+| `person.employment`                                       | Company name and domain, job title and role                           |
+| `person.location`, `person.geo`                           | Country code, city, state and country                                 |
+| `person.gender`                                           | Gender, when known                                                    |
+| `person.linkedin`, `person.twitter`                       | The person's social profile links                                     |
+| `person.verification`                                     | Email verification status (e.g. `valid`) and when it was checked      |
+| `person.phone`                                            | `true` if a phone number is known for this person                     |
+| `company.name`, `company.legalName`, `company.domain`     | Company name, legal name and website                                  |
+| `company.description`, `company.tags`                     | What the company does                                                 |
+| `company.category`                                        | Industry codes: SIC and NAICS                                         |
+| `company.foundedYear`, `company.type`                     | Year founded and company type, e.g. privately held                    |
+| `company.location`, `company.geo`                         | Country code and full address                                         |
+| `company.metrics`                                         | Employee range, revenue range and website traffic rank                |
+| `company.site`                                            | Phone numbers and email addresses published on the website            |
+| `company.linkedin`, `company.twitter`, `company.facebook` | Company social profiles                                               |
+| `company.tech`, `company.techCategories`                  | Technologies detected on the website and their categories             |
+| `company.emailProvider`, `company.whois`                  | Email provider and domain registration details                        |
+| `source`                                                  | Always `tomba_enrichment`                                             |
+| `charged`                                                 | `true` if this lookup was billed                                      |
+| `chargedCredits`                                          | Credits billed for this email: 2 ($0.00624) when charged, 0 otherwise |
+| `cached`                                                  | `true` if this result came from the cache (free)                      |
+| `error`                                                   | Why no data was returned, if applicable                               |
 
 Fields are filled when the information is publicly available, so some rows have fewer of them. Emails with no data still get a row with `email`, `charged: false` and an `error`, so nothing silently disappears from your list.
 
@@ -173,7 +175,7 @@ The dataset has four ready-made views: **Overview**, **Person Details**, **Compa
 
 ## Pricing
 
-**$0.00312 per email ($3.12 per 1,000).** No subscription and no Tomba account needed. Person and company data are included in the same charge.
+**$0.00624 per email ($6.24 per 1,000): 2 credits of $0.00312.** No subscription and no Tomba account needed. Person and company data are included in the same charge.
 
 You are only charged when Tomba returns a usable answer:
 
@@ -224,7 +226,7 @@ Run it on a schedule, call it from the Apify API, or connect it to Zapier, Make,
 No. Everything is built in. You only pay the per-email price on Apify.
 
 **How much does it cost?**
-$0.00312 per email with results ($3.12 per 1,000), for both the person and the company. Emails with no results, errors and cached lookups are free.
+$0.00624 per email with results ($6.24 per 1,000), for both the person and the company. Emails with no results, errors and cached lookups are free.
 
 **How many emails can I enrich in one run?**
 Up to 1,000 per run, processed in parallel. There is no rate limit.
